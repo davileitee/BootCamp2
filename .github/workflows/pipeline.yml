@@ -1,3 +1,4 @@
+
 name: integracao continua
 
 
@@ -86,11 +87,21 @@ jobs:
 
 
 
+      - name: Instalar globals para o ESLint
+
+        run: npm install --no-save globals
+
+
+
       - name: Criar configuração temporária do ESLint
 
         run: |
 
           cat > eslint.config.js <<'EOF'
+
+          const globals = require("globals");
+
+
 
           module.exports = [
 
@@ -104,7 +115,15 @@ jobs:
 
                 ecmaVersion: 2021,
 
-                sourceType: "commonjs"
+                sourceType: "commonjs",
+
+                globals: {
+
+                  ...globals.node,
+
+                  ...globals.commonjs
+
+                }
 
               },
 

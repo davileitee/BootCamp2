@@ -14,10 +14,10 @@ Projeto da discplina Integração Devops
   
 -git branch
 
--git git checkout nome-da-branch 
+-git checkout nome-da-branch 
 
 -git pull origin develop
-# faz alterações
+faz alterações
 
 -git add .
 

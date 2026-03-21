@@ -113,17 +113,17 @@
 
     <div class="restaurant-name">Aalthair's</div>
 
-    <form id="loginForm">
+    <form id="loginForm" method="POST" action="/login">
         <h2>🥪 Login</h2>
 
         <div class="input-group">
             <label>Usuário</label>
-            <input type="text" id="username" required>
+            <input type="text" id="username" name="username" required>
         </div>
 
         <div class="input-group">
             <label>Senha</label>
-            <input type="password" id="password" required>
+            <input type="password" id="password" name="password" required>
         </div>
 
         <button type="submit">Entrar</button>
@@ -134,18 +134,14 @@
 
 <script>
     document.getElementById('loginForm').addEventListener('submit', function(e){
-        e.preventDefault();
+        const user = document.getElementById('username').value.trim();
+        const pass = document.getElementById('password').value.trim();
 
-        const user = document.getElementById('username').value;
-        const pass = document.getElementById('password').value;
-
-        if(user.trim() === '' || pass.trim() === ''){
+        if (user === '' || pass === '') {
+            e.preventDefault();
             alert('Preencha todos os campos.');
-            return;
         }
-
-        // Simulação de login
-        alert(`Bem-vindo, ${user}! 🚀`);
+        // se tudo ok, o formulário é enviado para POST /login
     });
 </script>
 

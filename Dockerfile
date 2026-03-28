@@ -1,34 +1,27 @@
-# ESTÁGIO 1: Build (Onde instalamos tudo e compilamos)
+# ESTÁGIO 1: Build
 FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Copia apenas os arquivos de dependências primeiro (cache eficiente)
+# Copia apenas os arquivos de dependências primeiro
 COPY package*.json ./
-RUN npm install --frozen-lockfile
 
-# Copia o código e faz o build (se houver passo de build, ex: TS ou React)
+# Instala todas as dependências
+RUN npm install
+
+# Copia o restante do código
 COPY . .
-# RUN npm run build  <-- Ative se você tiver uma pasta /dist ou /build
 
----
-
-# ESTÁGIO 2: Produção (A imagem que será enviada ao registro)
+# ESTÁGIO 2: Produção (Imagem Final)
 FROM node:18-alpine AS runner
 WORKDIR /app
 
-# Definir ambiente como produção para o Node otimizar performance
 ENV NODE_ENV=production
 
-# Copia APENAS as dependências de produção (ignora devDependencies)
-COPY package*.json ./
-RUN npm install --only=production --ignore-scripts
-
-# Copia apenas os arquivos necessários do estágio de build
-# Se você tiver uma pasta /dist, substitua o "." abaixo por "dist"
+# Copia apenas os arquivos necessários do estágio anterior
 COPY --from=builder /app .
 
-# Remove caches de pacotes que o npm deixa pra trás
-RUN rm -rf /root/.npm
+# Instala apenas o necessário para rodar (limpa o cache do npm no final)
+RUN npm install --only=production && rm -rf /root/.npm
 
 EXPOSE 3000
 CMD ["npm", "start"]

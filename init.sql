@@ -17,4 +17,4 @@ CREATE TABLE IF NOT EXISTS orders (
 );
 INSERT INTO users (username, password)
 VALUES ('admin', '$2b$10$ViaCBS.xq30inzns4uxUAelpJGcWwygdBG3Ot26p353lYdUD1IG4C');
-INSERT INTO items (name, category) VALUES ('Arroz Branco', 'Base'), ('Feijão Preto', 'Grão');
+INSERT INTO items (name, category) VALUES ('Arroz Branco', 'Base'), ('Feijao Preto', 'Grao');

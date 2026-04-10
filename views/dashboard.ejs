@@ -3,35 +3,198 @@
 <head>
     <title>MarmitaTech - Dashboard</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .grid { display: flex; gap: 20px; }
-        .card { border: 1px solid #ccc; padding: 15px; border-radius: 8px; width: 300px; }
+        :root {
+            --bg: #f5f8fb;
+            --surface: #ffffff;
+            --border: #d6e1ec;
+            --primary: #0077cc;
+            --primary-dark: #005fa1;
+            --text: #22303f;
+            --muted: #71829a;
+            --shadow: 0 14px 40px rgba(34, 48, 63, 0.08);
+            --radius: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Inter", system-ui, sans-serif;
+            background: linear-gradient(180deg, #eef6fc 0%, #f9fbfd 100%);
+            color: var(--text);
+        }
+
+        .page {
+            width: min(1200px, 100%);
+            margin: 0 auto;
+            padding: 32px 24px 48px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(2rem, 2.6vw, 2.6rem);
+            letter-spacing: -0.03em;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            margin-top: 8px;
+            font-size: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+        }
+
+        .card h3 {
+            margin: 0 0 18px;
+            font-size: 1.25rem;
+        }
+
+        form {
+            display: grid;
+            gap: 16px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d6e1ec;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: var(--text);
+            background: #fbfdff;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: rgba(0, 119, 204, 0.7);
+            box-shadow: 0 0 0 4px rgba(0, 119, 204, 0.08);
+        }
+
+        button {
+            align-self: start;
+            border: none;
+            border-radius: 999px;
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 10px 20px rgba(0, 119, 204, 0.18);
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 12px;
+        }
+
+        li {
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: #f3f7fb;
+            border: 1px solid #e1e9f4;
+        }
+
+        hr {
+            margin: 40px 0 24px;
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #d6e1ec, transparent);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+
+        .note {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        @media (max-width: 520px) {
+            .page {
+                padding: 20px 16px 32px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Painel Administrativo - MarmitaTech</h1>
-    <div class="grid">
-        <div class="card">
-            <h3>Novo Item (Ingrediente)</h3>
-            <form action="/add-item" method="POST">
-                <input type="text" name="name" placeholder="Nome (Ex: Batata Doce)" required><br><br>
-                <input type="text" name="category" placeholder="Categoria (Ex: Carboidrato)"><br><br>
-                <button type="submit">Cadastrar Item</button>
-            </form>
+    <div class="page">
+        <header>
+            <div>
+                <h1>Painel Administrativo - MarmitaTech</h1>
+                <p class="subtitle">Controle seus ingredientes, visualize itens cadastrados e gerencie o fluxo de pedidos.</p>
+            </div>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <h3>Novo Item (Ingrediente)</h3>
+                <form action="/add-item" method="POST">
+                    <input type="text" name="name" placeholder="Nome (Ex: Batata Doce)" required>
+                    <input type="text" name="category" placeholder="Categoria (Ex: Carboidrato)">
+                    <button type="submit">Cadastrar Item</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Itens Cadastrados</h3>
+                <ul>
+                    <% items.forEach(item => { %>
+                        <li><strong><%= item.name %></strong> <span style="color: var(--muted);">(<%= item.category %>)</span></li>
+                    <% }) %>
+                </ul>
+            </div>
         </div>
 
-        <div class="card">
-            <h3>Itens Cadastrados</h3>
-            <ul>
-                <% items.forEach(item => { %>
-                    <li><%= item.name %> (<%= item.category %>)</li>
-                <% }) %>
-            </ul>
+        <hr>
+        <div class="section-title">
+            <span>📦</span>
+            <h2 style="margin: 0; font-size: 1.35rem;">Pedidos Ativos</h2>
         </div>
+        <p class="note"><em>Aqui será implementado o Kanban nas próximas aulas...</em></p>
     </div>
-
-    <hr>
-    <h2>📦 Pedidos Ativos</h2>
-    <p><i>Aqui será implementado o Kanban nas próximas aulas...</i></p>
 </body>
 </html>

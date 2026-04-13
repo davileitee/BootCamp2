@@ -6,191 +6,35 @@
     <title>Poupe & Previna | Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-        .alert-border { box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.18); }
+        body { font-family: sans-serif; padding: 20px; }
+        .grid { display: flex; gap: 20px; }
+        .card { border: 1px solid #ccc; padding: 15px; border-radius: 8px; width: 300px; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
-    <div class="min-h-screen">
-        <header class="bg-white border-b border-slate-200">
-            <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <div>
-                        <p class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-600">Poupe & Previna</p>
-                        <h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-900">Sistema de Gestão de Validade</h1>
-                        <p class="mt-3 max-w-2xl text-sm leading-6 text-slate-600">Monitore alimentos e remédios em segundos. Itens com 3 dias ou menos para vencer são destacados automaticamente.</p>
-                    </div>
-                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-                        <div class="rounded-3xl bg-emerald-50 px-4 py-3 text-sm text-emerald-700">Offline & local: validade salva no navegador</div>
-                        <a href="/" class="inline-flex items-center justify-center rounded-3xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-slate-800">Sair</a>
-                    </div>
-                </div>
-            </div>
-        </header>
+<body>
+    <h1>Painel Administrativo - MarmitaTech</h1>
+    <div class="grid">
+        <div class="card">
+            <h3>Novo Item (Ingrediente)</h3>
+            <form action="/add-item" method="POST">
+                <input type="text" name="name" placeholder="Nome (Ex: Batata Doce)" required><br><br>
+                <input type="text" name="category" placeholder="Categoria (Ex: Carboidrato)"><br><br>
+                <button type="submit">Cadastrar Item</button>
+            </form>
+        </div>
 
-        <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-            <section class="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
-                <article class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Itens cadastrados</p>
-                            <h2 class="mt-2 text-2xl font-semibold text-slate-900">Controle de validade</h2>
-                        </div>
-                        <div class="rounded-3xl bg-slate-100 px-4 py-3 text-sm text-slate-700">Itens: <span id="totalItems"><%= items.length %></span></div>
-                    </div>
-
-                    <div class="mt-6 grid gap-4">
-                        <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                            <p class="text-sm text-slate-600">Preencha a data de validade para cada item. As informações são salvas localmente no seu navegador.</p>
-                        </div>
-                        <div class="grid gap-4">
-                            <% items.forEach(item => { %>
-                                <article class="item-card rounded-3xl border border-slate-200 bg-white p-5 transition hover:shadow-lg" data-item-id="<%= item.id %>" data-item-name="<%= item.name %>" data-item-category="<%= item.category %>">
-                                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                                        <div>
-                                            <p class="text-lg font-semibold text-slate-900"><%= item.name %></p>
-                                            <p class="mt-1 text-sm text-slate-500"><%= item.category || 'Categoria não informada' %></p>
-                                        </div>
-                                        <div class="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-2 text-sm font-medium text-slate-700">
-                                            <span class="text-base">🗃️</span>
-                                            Referência ID: <span class="font-semibold"><%= item.id %></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="mt-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
-                                        <div class="space-y-2">
-                                            <div class="flex items-center gap-2 text-sm text-slate-500">
-                                                <span class="text-base">📅</span>
-                                                <span class="expiry-text">Validade local não cadastrada</span>
-                                            </div>
-                                            <p class="text-sm text-slate-500">Mantenha o estoque sob controle e reduza desperdício.</p>
-                                        </div>
-                                        <div class="grid gap-2 sm:grid-cols-[1fr_auto]">
-                                            <input type="date" class="expiry-input rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-900" aria-label="Data de validade">
-                                            <button type="button" class="save-expiry rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700">Salvar</button>
-                                        </div>
-                                    </div>
-                                </article>
-                            <% }) %>
-                        </div>
-                    </div>
-                </article>
-
-                <aside class="space-y-6">
-                    <section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                        <h3 class="text-xl font-semibold text-slate-900">Alertas de validade</h3>
-                        <p class="mt-2 text-sm text-slate-600">Itens que expiram em 3 dias ou menos são destacados em vermelho.</p>
-                        <div class="mt-6 space-y-4">
-                            <div class="rounded-3xl bg-rose-50 p-4 text-rose-700">
-                                <p class="font-semibold">Situação crítica</p>
-                                <p class="mt-1 text-sm">Use as datas abaixo para priorizar consumos e evitar perdas.</p>
-                            </div>
-                            <div class="grid gap-3">
-                                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                                    <p class="text-sm text-slate-500">Itens expirando em 3 dias</p>
-                                    <p class="mt-2 text-3xl font-semibold text-slate-900" id="countUrgent">0</p>
-                                </div>
-                                <div class="rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                                    <p class="text-sm text-slate-500">Itens com validade registrada</p>
-                                    <p class="mt-2 text-3xl font-semibold text-slate-900" id="countTracked">0</p>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="rounded-3xl border border-slate-200 bg-indigo-950 p-6 text-white shadow-sm">
-                        <h3 class="text-xl font-semibold">Importante</h3>
-                        <p class="mt-3 text-sm leading-6 text-slate-100">O controle de validade é feito no navegador. Se o sistema for aberto em outro dispositivo, será necessário registrar as datas novamente.</p>
-                    </section>
-                </aside>
-            </section>
-        </main>
+        <div class="card">
+            <h3>Itens Cadastrados</h3>
+            <ul>
+                <% items.forEach(item => { %>
+                    <li><%= item.name %> (<%= item.category %>)</li>
+                <% }) %>
+            </ul>
+        </div>
     </div>
 
-    <script>
-        const today = new Date();
-        const items = document.querySelectorAll('.item-card');
-        const countUrgent = document.getElementById('countUrgent');
-        const countTracked = document.getElementById('countTracked');
-
-        function formatDateForUI(dateString) {
-            const date = new Date(dateString);
-            if (!date || isNaN(date)) return 'Data inválida';
-            return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        }
-
-        function getItemKey(id) {
-            return `poupe-previna-expiry-${id}`;
-        }
-
-        function updateCounters() {
-            let tracked = 0;
-            let urgent = 0;
-
-            items.forEach(card => {
-                const expiryText = card.querySelector('.expiry-text');
-                const itemId = card.dataset.itemId;
-                const storedValue = localStorage.getItem(getItemKey(itemId));
-                if (storedValue) {
-                    tracked += 1;
-                    const expiryDate = new Date(storedValue + 'T23:59:59');
-                    const diffMs = expiryDate - new Date();
-                    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-                    if (diffDays <= 0) {
-                        expiryText.textContent = `Expirado em ${formatDateForUI(storedValue)}`;
-                        card.classList.add('border-rose-500', 'alert-border');
-                        card.style.borderColor = '#f43f5e';
-                        card.querySelector('.expiry-text').classList.remove('text-slate-500');
-                        card.querySelector('.expiry-text').classList.add('text-rose-700');
-                    } else if (diffDays <= 3) {
-                        expiryText.textContent = `Vence em ${diffDays} dia${diffDays === 1 ? '' : 's'} (${formatDateForUI(storedValue)})`;
-                        card.classList.add('border-rose-500', 'alert-border');
-                        card.style.borderColor = '#f43f5e';
-                        card.querySelector('.expiry-text').classList.remove('text-slate-500');
-                        card.querySelector('.expiry-text').classList.add('text-rose-700');
-                        urgent += 1;
-                    } else {
-                        expiryText.textContent = `Vence em ${diffDays} dias (${formatDateForUI(storedValue)})`;
-                        card.classList.remove('border-rose-500', 'alert-border');
-                        card.style.borderColor = '#e2e8f0';
-                        card.querySelector('.expiry-text').classList.remove('text-rose-700');
-                        card.querySelector('.expiry-text').classList.add('text-slate-500');
-                    }
-                } else {
-                    expiryText.textContent = 'Validade local não cadastrada';
-                    card.classList.remove('border-rose-500', 'alert-border');
-                    card.style.borderColor = '#e2e8f0';
-                    card.querySelector('.expiry-text').classList.remove('text-rose-700');
-                    card.querySelector('.expiry-text').classList.add('text-slate-500');
-                }
-            });
-
-            countTracked.textContent = tracked;
-            countUrgent.textContent = urgent;
-        }
-
-        items.forEach(card => {
-            const itemId = card.dataset.itemId;
-            const dateInput = card.querySelector('.expiry-input');
-            const saveButton = card.querySelector('.save-expiry');
-            const storedValue = localStorage.getItem(getItemKey(itemId));
-            if (storedValue) {
-                dateInput.value = storedValue;
-            }
-
-            saveButton.addEventListener('click', () => {
-                if (!dateInput.value) {
-                    alert('Escolha uma data de validade antes de salvar.');
-                    return;
-                }
-                localStorage.setItem(getItemKey(itemId), dateInput.value);
-                updateCounters();
-                alert('Data de validade salva localmente para este item.');
-            });
-        });
-
-        updateCounters();
-    </script>
+    <hr>
+    <h2>📦 Pedidos Ativos</h2>
+    <p><i>Aqui será implementado o Kanban nas próximas aulas...</i></p>
 </body>
 </html>

@@ -1,6 +1,4 @@
-Projeto da discplina Integração Devops
 
--Projeto Devops
 
 -Para buildar: docker compose up --build -d
 

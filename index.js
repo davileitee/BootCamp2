@@ -5,6 +5,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 
 const app = express();
+app.disable('x-powered-by');
 
 const dbConfig = {
     host: process.env.DB_HOST || 'db',

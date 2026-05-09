@@ -13,7 +13,11 @@ CREATE TABLE IF NOT EXISTS items (
 CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_name VARCHAR(100),
-    status VARCHAR(20) DEFAULT 'Aberto'
+    item_id INT,
+    price DECIMAL(10,2) DEFAULT 15.00,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'Aberto',
+    FOREIGN KEY (item_id) REFERENCES items(id)
 );
 INSERT INTO users (username, password)
 VALUES ('admin', '$2b$10$ViaCBS.xq30inzns4uxUAelpJGcWwygdBG3Ot26p353lYdUD1IG4C');

@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Aalthair's Food | Login</title>
+<title>Aalthair's Food | Novo Pedido</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -72,7 +72,7 @@
         font-weight: 600;
         color: #334155;
     }
-    .field input {
+    .field input, .field select {
         width: 100%;
         padding: 14px 16px;
         border-radius: 14px;
@@ -81,7 +81,7 @@
         font-size: 1rem;
         color: #0f172a;
     }
-    .field input:focus {
+    .field input:focus, .field select:focus {
         outline: none;
         border-color: #ff4500;
         box-shadow: 0 0 0 4px rgba(255, 69, 0, 0.12);
@@ -108,38 +108,55 @@
         color: #64748b;
         text-align: center;
     }
+    .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 16px;
+        color: #ff4500;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    .back-link:hover {
+        text-decoration: underline;
+    }
 </style>
 </head>
 <body>
 <div class="card">
     <div class="brand">
-        <div class="brand-icon">⚕️</div>
+        <div class="brand-icon">🍽️</div>
         <div class="brand-title">Aalthair's Food</div>
     </div>
-    <h1>Login de Acesso</h1>
-    <p class="hint">Acesse o sistema de controle de validade para reduzir desperdício de alimentos.</p>
+    <h1>Cadastro de Pedido</h1>
+    <p class="hint">Registre um novo pedido associando um cliente a uma marmita disponível.</p>
 
-    <form id="loginForm" method="POST" action="/login">
+    <form id="orderForm" method="POST" action="/orders">
         <div class="field">
-            <label for="username">Usuário</label>
-            <input type="text" id="username" name="username" autocomplete="username" required>
+            <label for="customer_name">Nome do Cliente</label>
+            <input type="text" id="customer_name" name="customer_name" required>
         </div>
         <div class="field">
-            <label for="password">Senha</label>
-            <input type="password" id="password" name="password" autocomplete="current-password" required>
+            <label for="item_id">Selecionar Marmita</label>
+            <select id="item_id" name="item_id" required>
+                <option value="">Escolha uma marmita</option>
+                <% items.forEach(item => { %>
+                    <option value="<%= item.id %>"><%= item.name %> (<%= item.category %>)</option>
+                <% }); %>
+            </select>
         </div>
-        <button type="submit">Entrar</button>
+        <button type="submit">Cadastrar Pedido</button>
     </form>
+    <a href="/dashboard" class="back-link">Voltar ao Dashboard</a>
     <div class="footer">© 2026 Aalthair's Food • Sistema de Gestão de Validade</div>
 </div>
 
 <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e){
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value.trim();
-        if (!username || !password) {
+    document.getElementById('orderForm').addEventListener('submit', function(e){
+        const customer = document.getElementById('customer_name').value.trim();
+        const item = document.getElementById('item_id').value;
+        if (!customer || !item) {
             e.preventDefault();
-            alert('Por favor, preencha todos os campos antes de entrar.');
+            alert('Por favor, preencha todos os campos.');
         }
     });
 </script>

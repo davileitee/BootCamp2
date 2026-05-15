@@ -148,8 +148,14 @@
             <h2>Aberto</h2>
             <% orders.filter(o => o.status === 'Aberto').forEach(order => { %>
                 <div class="order-card" id="card-<%= order.id %>" data-id="<%= order.id %>" data-status="<%= order.status %>">
-                    <div class="order-info"><%= order.customer_name %></div>
+                    <div class="order-info">Pedido #<%= order.id %> - <%= order.customer_name %></div>
                     <div class="order-item"><%= order.item_name || 'N/A' %></div>
+                    <% if (order.rua) { %>
+                        <div class="order-item" style="font-size: 0.8rem; margin-bottom: 12px; line-height: 1.3;">
+                            📍 <%= order.rua %>, <%= order.bairro %><br>
+                            <%= order.cidade %> - <%= order.estado %>
+                        </div>
+                    <% } %>
                     <div class="order-status"><%= order.status %></div>
                     <button class="advance-btn" onclick="advanceStatus(<%= order.id %>, '<%= order.status %>')">Avançar para Cozinha</button>
                 </div>
@@ -159,8 +165,14 @@
             <h2>Cozinha</h2>
             <% orders.filter(o => o.status === 'Cozinha').forEach(order => { %>
                 <div class="order-card" id="card-<%= order.id %>" data-id="<%= order.id %>" data-status="<%= order.status %>">
-                    <div class="order-info"><%= order.customer_name %></div>
+                    <div class="order-info">Pedido #<%= order.id %> - <%= order.customer_name %></div>
                     <div class="order-item"><%= order.item_name || 'N/A' %></div>
+                    <% if (order.rua) { %>
+                        <div class="order-item" style="font-size: 0.8rem; margin-bottom: 12px; line-height: 1.3;">
+                            📍 <%= order.rua %>, <%= order.bairro %><br>
+                            <%= order.cidade %> - <%= order.estado %>
+                        </div>
+                    <% } %>
                     <div class="order-status"><%= order.status %></div>
                     <button class="advance-btn" onclick="advanceStatus(<%= order.id %>, '<%= order.status %>')">Avançar para Entrega</button>
                 </div>
@@ -170,8 +182,14 @@
             <h2>Entrega</h2>
             <% orders.filter(o => o.status === 'Entrega').forEach(order => { %>
                 <div class="order-card" id="card-<%= order.id %>" data-id="<%= order.id %>" data-status="<%= order.status %>">
-                    <div class="order-info"><%= order.customer_name %></div>
+                    <div class="order-info">Pedido #<%= order.id %> - <%= order.customer_name %></div>
                     <div class="order-item"><%= order.item_name || 'N/A' %></div>
+                    <% if (order.rua) { %>
+                        <div class="order-item" style="font-size: 0.8rem; margin-bottom: 12px; line-height: 1.3;">
+                            📍 <%= order.rua %>, <%= order.bairro %><br>
+                            <%= order.cidade %> - <%= order.estado %>
+                        </div>
+                    <% } %>
                     <div class="order-status"><%= order.status %></div>
                     <button class="advance-btn" onclick="advanceStatus(<%= order.id %>, '<%= order.status %>')">Marcar como Entregue</button>
                 </div>
@@ -181,8 +199,14 @@
             <h2>Entregue</h2>
             <% orders.filter(o => o.status === 'Entregue').forEach(order => { %>
                 <div class="order-card" id="card-<%= order.id %>" data-id="<%= order.id %>" data-status="<%= order.status %>">
-                    <div class="order-info"><%= order.customer_name %></div>
+                    <div class="order-info">Pedido #<%= order.id %> - <%= order.customer_name %></div>
                     <div class="order-item"><%= order.item_name || 'N/A' %></div>
+                    <% if (order.rua) { %>
+                        <div class="order-item" style="font-size: 0.8rem; margin-bottom: 12px; line-height: 1.3;">
+                            📍 <%= order.rua %>, <%= order.bairro %><br>
+                            <%= order.cidade %> - <%= order.estado %>
+                        </div>
+                    <% } %>
                     <div class="order-status"><%= order.status %></div>
                     <span>Finalizado</span>
                 </div>

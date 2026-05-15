@@ -17,6 +17,11 @@ CREATE TABLE IF NOT EXISTS orders (
     price DECIMAL(10,2) DEFAULT 15.00,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     status VARCHAR(20) DEFAULT 'Aberto',
+    cep VARCHAR(20),
+    rua VARCHAR(255),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
+    estado VARCHAR(2),
     FOREIGN KEY (item_id) REFERENCES items(id)
 );
 INSERT INTO users (username, password)

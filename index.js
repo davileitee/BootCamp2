@@ -7,6 +7,22 @@ const bcrypt = require('bcrypt');
 const app = express();
 app.disable('x-powered-by');
 
+const fs = require('fs');
+let properties = {};
+try {
+    const propsFile = fs.readFileSync(path.join(__dirname, 'application.properties'), 'utf-8');
+    propsFile.split('\n').forEach(line => {
+        if (line && !line.startsWith('#') && line.includes('=')) {
+            const index = line.indexOf('=');
+            const key = line.substring(0, index).trim();
+            const val = line.substring(index + 1).trim();
+            if (key && val) properties[key] = val;
+        }
+    });
+} catch (e) {
+    console.log('⚠️ [CONFIG] Não foi possível ler application.properties');
+}
+
 const dbConfig = {
     host: process.env.DB_HOST || 'db',
     user: process.env.DB_USER || 'user',
@@ -28,7 +44,12 @@ async function connectWithRetry() {
             try {
                 await pool.query('ALTER TABLE orders ADD COLUMN price DECIMAL(10,2) DEFAULT 15.00');
                 await pool.query('ALTER TABLE orders ADD COLUMN created_at DATETIME DEFAULT CURRENT_TIMESTAMP');
-                console.log('✅ [DATABASE] Colunas novas (price, created_at) verificadas/adicionadas.');
+                await pool.query('ALTER TABLE orders ADD COLUMN cep VARCHAR(20)');
+                await pool.query('ALTER TABLE orders ADD COLUMN rua VARCHAR(255)');
+                await pool.query('ALTER TABLE orders ADD COLUMN bairro VARCHAR(100)');
+                await pool.query('ALTER TABLE orders ADD COLUMN cidade VARCHAR(100)');
+                await pool.query('ALTER TABLE orders ADD COLUMN estado VARCHAR(2)');
+                console.log('✅ [DATABASE] Colunas novas (price, created_at, endereço) verificadas/adicionadas.');
             } catch (e) {
                 // Se a coluna já existir, ele cai aqui, o que é esperado e podemos ignorar com segurança
                 if (e.code !== 'ER_DUP_FIELDNAME') {
@@ -92,6 +113,33 @@ app.get('/dashboard', async (req, res) => {
 app.get('/new-order', async (req, res) => {
     const [items] = await pool.query('SELECT * FROM items');
     res.render('new-order', { items });
+});
+
+app.get('/create-order', async (req, res) => {
+    const itemId = req.query.itemId;
+    if (!itemId) return res.redirect('/dashboard');
+    const [items] = await pool.query('SELECT * FROM items WHERE id = ?', [itemId]);
+    if (items.length === 0) return res.redirect('/dashboard');
+    
+    const viacepUrl = properties['viacep.api.url'] || 'https://viacep.com.br/ws/';
+    res.render('create-order', { item: items[0], viacepUrl });
+});
+
+app.post('/create-order', async (req, res) => {
+    const { item_id, customer_name, cep, rua, bairro, cidade, estado } = req.body;
+    const finalCustomerName = customer_name && customer_name.trim() !== '' ? customer_name : 'Cliente Balcão';
+    const initialStatus = 'Aberto';
+    
+    try {
+        await pool.query(
+            'INSERT INTO orders (customer_name, item_id, status, cep, rua, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [finalCustomerName, item_id, initialStatus, cep, rua, bairro, cidade, estado]
+        );
+        res.redirect('/dashboard');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Erro ao criar pedido com endereço.');
+    }
 });
 
 app.post('/orders', async (req, res) => {
@@ -228,5 +276,5 @@ app.get('/admin/export', async (req, res) => {
 });
 
 connectWithRetry().then(() => {
-    app.listen(3000, () => console.log('🚀 MARMITATECH PRO ONLINE NA PORTA 3000'));
+    app.listen(4000, () => console.log('🚀 MARMITATECH PRO ONLINE NA PORTA 4000'));
 });

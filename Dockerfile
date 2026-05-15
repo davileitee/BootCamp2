@@ -23,5 +23,5 @@ COPY --from=builder /app .
 # Instala apenas o necessário para rodar (limpa o cache do npm no final)
 RUN npm install --only=production && rm -rf /root/.npm
 
-EXPOSE 3000
+EXPOSE 4000
 CMD ["npm", "start"]

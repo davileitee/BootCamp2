@@ -407,8 +407,8 @@
                             <div class="item-title" style="white-space: normal; font-size: 1.1rem; line-height: 1.2; margin-bottom: 4px;"><%= item.name %></div>
                             <div class="item-subtitle"><%= item.category || 'Sem categoria' %></div>
                         </div>
-                        <!-- Botão de Criação Rápida de Pedido -->
-                        <button class="btn-secondary" style="width: auto; flex-shrink: 0; margin-left: auto; padding: 8px 16px; font-size: 0.85rem;" onclick="createQuickOrder(<%= item.id %>, '<%= item.name %>')">Criar Pedido</button>
+                        <!-- Botão Redireciona para a tela de Criação com ViaCEP -->
+                        <a href="/create-order?itemId=<%= item.id %>" class="btn-secondary" style="width: auto; flex-shrink: 0; margin-left: auto; padding: 8px 16px; font-size: 0.85rem; text-decoration: none; text-align: center;">Criar Pedido</a>
                     </div>
                 <% }) %>
             </div>
@@ -432,8 +432,14 @@
                     <div class="item-row order-item">
                         <div class="order-header">
                             <div class="item-details" style="flex: 1;">
-                                <div class="item-title"><%= order.customer_name %></div>
+                                <div class="item-title">Pedido #<%= order.id %> - <%= order.customer_name %></div>
                                 <div class="item-subtitle">Marmita: <%= order.item_name || 'N/A' %></div>
+                                <% if (order.rua) { %>
+                                    <div class="item-subtitle" style="margin-top: 6px; font-size: 0.85rem; color: #475569;">
+                                        📍 <%= order.rua %>, <%= order.bairro %><br>
+                                        <%= order.cidade %> - <%= order.estado %>
+                                    </div>
+                                <% } %>
                             </div>
                             <div class="order-status"><%= order.status %></div>
                         </div>
@@ -504,7 +510,7 @@
                     <div class="item-row order-item">
                         <div class="order-header">
                             <div class="item-details" style="flex: 1;">
-                                <div class="item-title">${data.customer_name}</div>
+                                <div class="item-title">Pedido #${data.orderId} - ${data.customer_name}</div>
                                 <div class="item-subtitle">Marmita: ${itemName}</div>
                             </div>
                             <div class="order-status">${data.status}</div>

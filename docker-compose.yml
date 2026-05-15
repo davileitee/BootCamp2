@@ -1,14 +1,14 @@
 services:
   db:
     image: mysql:8.0
-    container_name: marmitatech-db
+    container_name: marmitatech-db-v2
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: marmitadb
       MYSQL_USER: user
       MYSQL_PASSWORD: password
     ports:
-      - "3307:3306"
+      - "3308:3306"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
@@ -18,11 +18,11 @@ services:
       retries: 10
 
   app:
-    image: marmitatech-app
+    image: marmitatech-app-v2
     build: .
-    container_name: marmitatech-app
+    container_name: marmitatech-app-v2
     ports:
-      - "3000:3000"
+      - "4000:4000"
     environment:
       DB_HOST: db
       DB_PORT: 3306

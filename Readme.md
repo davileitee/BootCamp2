@@ -18,11 +18,6 @@ Abra o MySql e execute : USE marmitadb;
 
 -Rodando em http://localhost:4000/
 
--Front-end atualizado para o sistema "Poupe & Previna":
-  * Login renovado com nova identidade visual
-  * Dashboard de controle de validade de alimentos e remédios
-  * Datas de validade são salvas localmente no navegador
-  * Itens com 3 dias ou menos para vencer ganham destaque visual
 
   --FLUXO SUBIDA DE CODIGO--
   
